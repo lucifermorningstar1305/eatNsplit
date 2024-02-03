@@ -4,14 +4,14 @@ import { useState } from "react";
 const SplitForm = ({ friend, onUpdate }) => {
   const [billVal, setBillVal] = useState(0);
   const [myExpense, setMyExpense] = useState(0);
-
   const [payer, setPayer] = useState("you");
+
+  const balance = billVal - myExpense;
 
   console.log(friend);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const balance = billVal - myExpense;
     if (payer === "you") onUpdate({ ...friend, balance: -balance });
     if (payer === "friend") onUpdate({ ...friend, balance: balance });
 
@@ -33,14 +33,14 @@ const SplitForm = ({ friend, onUpdate }) => {
       <label>👨‍💼 Your expense</label>
       <input
         type="text"
-        value={myExpense === 0 ? "" : myExpense}
+        value={myExpense === 0 || myExpense > billVal ? "" : myExpense}
         placeholder=""
         onChange={(e) => setMyExpense(Number(e.target.value))}
       />
       <label>👫 {friend.name}'s expense</label>
       <input
         type="text"
-        value={billVal - myExpense === 0 ? "" : billVal - myExpense}
+        value={balance === 0 || balance < 0 ? "" : billVal - myExpense}
         disabled="disabled"
       />
       <label>🤑 Who is paying the bill?</label>
